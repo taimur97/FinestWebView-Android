@@ -1,29 +1,35 @@
 package com.thefinestartist.finestwebview;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.AnimRes;
+import android.support.annotation.ArrayRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.support.annotation.StyleRes;
 import android.support.design.widget.AppBarLayout.LayoutParams.ScrollFlags;
 import android.support.v4.content.ContextCompat;
+import android.webkit.WebSettings;
 
 import com.thefinestartist.finestwebview.enums.Position;
-import com.thefinestartist.finestwebview.helpers.DipPixelHelper;
+
+import java.io.Serializable;
 
 /**
  * Created by Leonardo on 11/21/15.
  */
 public class FinestWebView {
 
-    public static class Builder {
+    public static class Builder implements Serializable {
 
-        private Activity activity;
+        protected final transient Activity activity;
+
+        protected Boolean rtl;
+        protected Integer theme;
 
         protected Integer statusBarColor;
 
@@ -34,6 +40,19 @@ public class FinestWebView {
         protected Integer iconDisabledColor;
         protected Integer iconPressedColor;
         protected Integer iconSelector;
+
+        protected Boolean showIconClose;
+        protected Boolean disableIconClose;
+        protected Boolean showIconBack;
+        protected Boolean disableIconBack;
+        protected Boolean showIconForward;
+        protected Boolean disableIconForward;
+        protected Boolean showIconMenu;
+        protected Boolean disableIconMenu;
+
+        protected Boolean showSwipeRefreshLayout;
+        protected Integer swipeRefreshColor;
+        protected Integer[] swipeRefreshColors;
 
         protected Boolean showDivider;
         protected Boolean gradientDivider;
@@ -65,6 +84,10 @@ public class FinestWebView {
         protected String menuTextFont;
         protected Integer menuTextColor;
 
+        protected Integer menuTextGravity;
+        protected Float menuTextPaddingLeft;
+        protected Float menuTextPaddingRight;
+
         protected Boolean showMenuRefresh;
         protected Integer stringResRefresh;
         protected Boolean showMenuShareVia;
@@ -82,16 +105,64 @@ public class FinestWebView {
         protected Boolean backPressToClose;
         protected Integer stringResCopiedToClipboard;
 
+        protected Boolean webViewSupportZoom;
+        protected Boolean webViewMediaPlaybackRequiresUserGesture;
+        protected Boolean webViewBuiltInZoomControls;
+        protected Boolean webViewDisplayZoomControls;
+        protected Boolean webViewAllowFileAccess;
+        protected Boolean webViewAllowContentAccess;
+        protected Boolean webViewLoadWithOverviewMode;
+        protected Boolean webViewSaveFormData;
+        protected Integer webViewTextZoom;
+        protected Boolean webViewUseWideViewPort;
+        protected Boolean webViewSupportMultipleWindows;
+        protected WebSettings.LayoutAlgorithm webViewLayoutAlgorithm;
+        protected String webViewStandardFontFamily;
+        protected String webViewFixedFontFamily;
+        protected String webViewSansSerifFontFamily;
+        protected String webViewSerifFontFamily;
+        protected String webViewCursiveFontFamily;
+        protected String webViewFantasyFontFamily;
+        protected Integer webViewMinimumFontSize;
+        protected Integer webViewMinimumLogicalFontSize;
+        protected Integer webViewDefaultFontSize;
+        protected Integer webViewDefaultFixedFontSize;
+        protected Boolean webViewLoadsImagesAutomatically;
+        protected Boolean webViewBlockNetworkImage;
+        protected Boolean webViewBlockNetworkLoads;
+        protected Boolean webViewJavaScriptEnabled;
+        protected Boolean webViewAllowUniversalAccessFromFileURLs;
+        protected Boolean webViewAllowFileAccessFromFileURLs;
+        protected String webViewGeolocationDatabasePath;
+        protected Boolean webViewAppCacheEnabled;
+        protected String webViewAppCachePath;
+        protected Boolean webViewDatabaseEnabled;
+        protected Boolean webViewDomStorageEnabled;
+        protected Boolean webViewGeolocationEnabled;
+        protected Boolean webViewJavaScriptCanOpenWindowsAutomatically;
+        protected String webViewDefaultTextEncodingName;
+        protected String webViewUserAgentString;
+        protected Boolean webViewNeedInitialFocus;
+        protected Integer webViewCacheMode;
+        protected Integer webViewMixedContentMode;
+        protected Boolean webViewOffscreenPreRaster;
+
+        protected String injectJavaScript;
+
         protected String url;
 
-        @Deprecated
-        public Builder(@NonNull Context context) {
-            if (context instanceof Activity)
-                this.activity = (Activity) context;
+        public Builder rtl(boolean rtl) {
+            this.rtl = rtl;
+            return this;
         }
 
         public Builder(@NonNull Activity activity) {
             this.activity = activity;
+        }
+
+        public Builder theme(@StyleRes int theme) {
+            this.theme = theme;
+            return this;
         }
 
         public Builder statusBarColor(@ColorInt int color) {
@@ -154,6 +225,74 @@ public class FinestWebView {
             return this;
         }
 
+        public Builder showIconClose(boolean showIconClose) {
+            this.showIconClose = showIconClose;
+            return this;
+        }
+
+        public Builder disableIconClose(boolean disableIconClose) {
+            this.disableIconClose = disableIconClose;
+            return this;
+        }
+
+        public Builder showIconBack(boolean showIconBack) {
+            this.showIconBack = showIconBack;
+            return this;
+        }
+
+        public Builder disableIconBack(boolean disableIconBack) {
+            this.disableIconBack = disableIconBack;
+            return this;
+        }
+
+        public Builder showIconForward(boolean showIconForward) {
+            this.showIconForward = showIconForward;
+            return this;
+        }
+
+        public Builder disableIconForward(boolean disableIconForward) {
+            this.disableIconForward = disableIconForward;
+            return this;
+        }
+
+        public Builder showIconMenu(boolean showIconMenu) {
+            this.showIconMenu = showIconMenu;
+            return this;
+        }
+
+        public Builder disableIconMenu(boolean disableIconMenu) {
+            this.disableIconMenu = disableIconMenu;
+            return this;
+        }
+
+        public Builder showSwipeRefreshLayout(boolean showSwipeRefreshLayout) {
+            this.showSwipeRefreshLayout = showSwipeRefreshLayout;
+            return this;
+        }
+
+        public Builder swipeRefreshColor(@ColorInt int color) {
+            this.swipeRefreshColor = color;
+            return this;
+        }
+
+        public Builder swipeRefreshColorRes(@ColorRes int colorRes) {
+            this.swipeRefreshColor = ContextCompat.getColor(activity, colorRes);
+            return this;
+        }
+
+        public Builder swipeRefreshColors(int[] colors) {
+            Integer[] swipeRefreshColors = new Integer[colors.length];
+            for (int i = 0; i < colors.length; i++)
+                swipeRefreshColors[i] = colors[i];
+            this.swipeRefreshColors = swipeRefreshColors;
+            return this;
+        }
+
+        public Builder swipeRefreshColorsRes(@ArrayRes int colorsRes) {
+            int[] colors = activity.getResources().getIntArray(colorsRes);
+            return swipeRefreshColors(colors);
+        }
+
         public Builder showDivider(boolean showDivider) {
             this.showDivider = showDivider;
             return this;
@@ -185,7 +324,7 @@ public class FinestWebView {
         }
 
         public Builder dividerHeightRes(@DimenRes int height) {
-            this.dividerHeight = DipPixelHelper.getPixel(activity, height);
+            this.dividerHeight = activity.getResources().getDimension(height);
             return this;
         }
 
@@ -215,7 +354,7 @@ public class FinestWebView {
         }
 
         public Builder progressBarHeightRes(@DimenRes int height) {
-            this.progressBarHeight = DipPixelHelper.getPixel(activity, height);
+            this.progressBarHeight = activity.getResources().getDimension(height);
             return this;
         }
 
@@ -250,7 +389,7 @@ public class FinestWebView {
         }
 
         public Builder titleSizeRes(@DimenRes int titleSize) {
-            this.titleSize = DipPixelHelper.getPixel(activity, titleSize);
+            this.titleSize = activity.getResources().getDimension(titleSize);
             return this;
         }
 
@@ -285,7 +424,7 @@ public class FinestWebView {
         }
 
         public Builder urlSizeRes(@DimenRes int urlSize) {
-            this.urlSize = DipPixelHelper.getPixel(activity, urlSize);
+            this.urlSize = activity.getResources().getDimension(urlSize);
             return this;
         }
 
@@ -314,6 +453,41 @@ public class FinestWebView {
             return this;
         }
 
+        public Builder menuTextGravity(int gravity) {
+            this.menuTextGravity = gravity;
+            return this;
+        }
+
+        public Builder menuTextPaddingLeft(float menuTextPaddingLeft) {
+            this.menuTextPaddingLeft = menuTextPaddingLeft;
+            return this;
+        }
+
+        public Builder menuTextPaddingLeft(int menuTextPaddingLeft) {
+            this.menuTextPaddingLeft = (float) menuTextPaddingLeft;
+            return this;
+        }
+
+        public Builder menuTextPaddingLeftRes(@DimenRes int menuTextPaddingLeft) {
+            this.menuTextPaddingLeft = activity.getResources().getDimension(menuTextPaddingLeft);
+            return this;
+        }
+
+        public Builder menuTextPaddingRight(float menuTextPaddingRight) {
+            this.menuTextPaddingRight = menuTextPaddingRight;
+            return this;
+        }
+
+        public Builder menuTextPaddingRight(int menuTextPaddingRight) {
+            this.menuTextPaddingRight = (float) menuTextPaddingRight;
+            return this;
+        }
+
+        public Builder menuTextPaddingRightRes(@DimenRes int menuTextPaddingRight) {
+            this.menuTextPaddingRight = activity.getResources().getDimension(menuTextPaddingRight);
+            return this;
+        }
+
         public Builder menuDropShadowColor(@ColorInt int color) {
             this.menuDropShadowColor = color;
             return this;
@@ -335,7 +509,7 @@ public class FinestWebView {
         }
 
         public Builder menuDropShadowSizeRes(@DimenRes int menuDropShadowSize) {
-            this.menuDropShadowSize = DipPixelHelper.getPixel(activity, menuDropShadowSize);
+            this.menuDropShadowSize = activity.getResources().getDimension(menuDropShadowSize);
             return this;
         }
 
@@ -355,7 +529,7 @@ public class FinestWebView {
         }
 
         public Builder menuTextSizeRes(@DimenRes int menuTextSize) {
-            this.menuTextSize = DipPixelHelper.getPixel(activity, menuTextSize);
+            this.menuTextSize = activity.getResources().getDimension(menuTextSize);
             return this;
         }
 
@@ -445,6 +619,224 @@ public class FinestWebView {
             return this;
         }
 
+        public Builder webViewSupportZoom(boolean webViewSupportZoom) {
+            this.webViewSupportZoom = webViewSupportZoom;
+            return this;
+        }
+
+        public Builder webViewMediaPlaybackRequiresUserGesture (boolean webViewMediaPlaybackRequiresUserGesture) {
+            this.webViewMediaPlaybackRequiresUserGesture = webViewMediaPlaybackRequiresUserGesture;
+            return this;
+        }
+
+        public Builder webViewBuiltInZoomControls (boolean webViewBuiltInZoomControls) {
+            this.webViewBuiltInZoomControls = webViewBuiltInZoomControls;
+            return this;
+        }
+
+        public Builder webViewDisplayZoomControls (boolean webViewDisplayZoomControls) {
+            this.webViewDisplayZoomControls = webViewDisplayZoomControls;
+            return this;
+        }
+
+        public Builder webViewAllowFileAccess (boolean webViewAllowFileAccess) {
+            this.webViewAllowFileAccess = webViewAllowFileAccess;
+            return this;
+        }
+
+        public Builder webViewAllowContentAccess (boolean webViewAllowContentAccess) {
+            this.webViewAllowContentAccess = webViewAllowContentAccess;
+            return this;
+        }
+
+        public Builder webViewLoadWithOverviewMode (boolean webViewLoadWithOverviewMode) {
+            this.webViewLoadWithOverviewMode = webViewLoadWithOverviewMode;
+            return this;
+        }
+
+        public Builder webViewSaveFormData (boolean webViewSaveFormData) {
+            this.webViewSaveFormData = webViewSaveFormData;
+            return this;
+        }
+
+        public Builder webViewTextZoom (int webViewTextZoom) {
+            this.webViewTextZoom = webViewTextZoom;
+            return this;
+        }
+
+        public Builder webViewUseWideViewPort (boolean webViewUseWideViewPort) {
+            this.webViewUseWideViewPort = webViewUseWideViewPort;
+            return this;
+        }
+
+        public Builder webViewSupportMultipleWindows (boolean webViewSupportMultipleWindows) {
+            this.webViewSupportMultipleWindows = webViewSupportMultipleWindows;
+            return this;
+        }
+
+        public Builder webViewLayoutAlgorithm (WebSettings.LayoutAlgorithm webViewLayoutAlgorithm) {
+            this.webViewLayoutAlgorithm = webViewLayoutAlgorithm;
+            return this;
+        }
+
+        public Builder webViewStandardFontFamily (String webViewStandardFontFamily) {
+            this.webViewStandardFontFamily = webViewStandardFontFamily;
+            return this;
+        }
+
+        public Builder webViewFixedFontFamily (String webViewFixedFontFamily) {
+            this.webViewFixedFontFamily = webViewFixedFontFamily;
+            return this;
+        }
+
+        public Builder webViewSansSerifFontFamily (String webViewSansSerifFontFamily) {
+            this.webViewSansSerifFontFamily = webViewSansSerifFontFamily;
+            return this;
+        }
+
+        public Builder webViewSerifFontFamily (String webViewSerifFontFamily) {
+            this.webViewSerifFontFamily = webViewSerifFontFamily;
+            return this;
+        }
+
+        public Builder webViewCursiveFontFamily (String webViewCursiveFontFamily) {
+            this.webViewCursiveFontFamily = webViewCursiveFontFamily;
+            return this;
+        }
+
+        public Builder webViewFantasyFontFamily (String webViewFantasyFontFamily) {
+            this.webViewFantasyFontFamily = webViewFantasyFontFamily;
+            return this;
+        }
+
+        public Builder webViewMinimumFontSize (int webViewMinimumFontSize) {
+            this.webViewMinimumFontSize = webViewMinimumFontSize;
+            return this;
+        }
+
+        public Builder webViewMinimumLogicalFontSize (int webViewMinimumLogicalFontSize) {
+            this.webViewMinimumLogicalFontSize = webViewMinimumLogicalFontSize;
+            return this;
+        }
+
+        public Builder webViewDefaultFontSize (int webViewDefaultFontSize) {
+            this.webViewDefaultFontSize = webViewDefaultFontSize;
+            return this;
+        }
+
+        public Builder webViewDefaultFixedFontSize (int webViewDefaultFixedFontSize) {
+            this.webViewDefaultFixedFontSize = webViewDefaultFixedFontSize;
+            return this;
+        }
+
+        public Builder webViewLoadsImagesAutomatically (boolean webViewLoadsImagesAutomatically) {
+            this.webViewLoadsImagesAutomatically = webViewLoadsImagesAutomatically;
+            return this;
+        }
+
+        public Builder webViewBlockNetworkImage (boolean webViewBlockNetworkImage) {
+            this.webViewBlockNetworkImage = webViewBlockNetworkImage;
+            return this;
+        }
+
+        public Builder webViewBlockNetworkLoads (boolean webViewBlockNetworkLoads) {
+            this.webViewBlockNetworkLoads = webViewBlockNetworkLoads;
+            return this;
+        }
+
+        public Builder webViewJavaScriptEnabled (boolean webViewJavaScriptEnabled) {
+            this.webViewJavaScriptEnabled = webViewJavaScriptEnabled;
+            return this;
+        }
+
+        public Builder webViewAllowUniversalAccessFromFileURLs (boolean webViewAllowUniversalAccessFromFileURLs) {
+            this.webViewAllowUniversalAccessFromFileURLs = webViewAllowUniversalAccessFromFileURLs;
+            return this;
+        }
+
+        public Builder webViewAllowFileAccessFromFileURLs (boolean webViewAllowFileAccessFromFileURLs) {
+            this.webViewAllowFileAccessFromFileURLs = webViewAllowFileAccessFromFileURLs;
+            return this;
+        }
+
+        public Builder webViewGeolocationDatabasePath (String webViewGeolocationDatabasePath) {
+            this.webViewGeolocationDatabasePath = webViewGeolocationDatabasePath;
+            return this;
+        }
+
+        public Builder webViewAppCacheEnabled (boolean webViewAppCacheEnabled) {
+            this.webViewAppCacheEnabled = webViewAppCacheEnabled;
+            return this;
+        }
+
+        public Builder webViewAppCachePath (String webViewAppCachePath) {
+            this.webViewAppCachePath = webViewAppCachePath;
+            return this;
+        }
+
+        public Builder webViewDatabaseEnabled (boolean webViewDatabaseEnabled) {
+            this.webViewDatabaseEnabled = webViewDatabaseEnabled;
+            return this;
+        }
+
+        public Builder webViewDomStorageEnabled (boolean webViewDomStorageEnabled) {
+            this.webViewDomStorageEnabled = webViewDomStorageEnabled;
+            return this;
+        }
+
+        public Builder webViewGeolocationEnabled (boolean webViewGeolocationEnabled) {
+            this.webViewGeolocationEnabled = webViewGeolocationEnabled;
+            return this;
+        }
+
+        public Builder webViewJavaScriptCanOpenWindowsAutomatically (boolean webViewJavaScriptCanOpenWindowsAutomatically) {
+            this.webViewJavaScriptCanOpenWindowsAutomatically = webViewJavaScriptCanOpenWindowsAutomatically;
+            return this;
+        }
+
+        public Builder webViewDefaultTextEncodingName (String webViewDefaultTextEncodingName) {
+            this.webViewDefaultTextEncodingName = webViewDefaultTextEncodingName;
+            return this;
+        }
+
+        public Builder webViewUserAgentString (String webViewUserAgentString) {
+            this.webViewUserAgentString = webViewUserAgentString;
+            return this;
+        }
+
+        public Builder webViewNeedInitialFocus (boolean webViewNeedInitialFocus) {
+            this.webViewNeedInitialFocus = webViewNeedInitialFocus;
+            return this;
+        }
+
+        public Builder webViewCacheMode (int webViewCacheMode) {
+            this.webViewCacheMode = webViewCacheMode;
+            return this;
+        }
+
+        public Builder webViewMixedContentMode (int webViewMixedContentMode) {
+            this.webViewMixedContentMode = webViewMixedContentMode;
+            return this;
+        }
+
+        public Builder webViewOffscreenPreRaster (boolean webViewOffscreenPreRaster) {
+            this.webViewOffscreenPreRaster = webViewOffscreenPreRaster;
+            return this;
+        }
+
+        /**
+         * @deprecated As of release 1.1.1, replaced by {@link #webViewUserAgentString(String)}
+         * Use setUserAgentString("Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.4) Gecko/20100101 Firefox/4.0") instead
+         */
+        public Builder webViewDesktopMode(boolean webViewDesktopMode) {
+            return webViewUserAgentString("Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.4) Gecko/20100101 Firefox/4.0");
+        }
+
+        public Builder injectJavaScript(String injectJavaScript) {
+            this.injectJavaScript = injectJavaScript;
+            return this;
+        }
+
         public void show(@StringRes int urlRes) {
             show(activity.getString(urlRes));
         }
@@ -453,106 +845,7 @@ public class FinestWebView {
             this.url = url;
 
             Intent intent = new Intent(activity, FinestWebViewActivity.class);
-
-            if (statusBarColor != null)
-                intent.putExtra("statusBarColor", statusBarColor.intValue());
-
-            if (toolbarColor != null)
-                intent.putExtra("toolbarColor", toolbarColor.intValue());
-            if (toolbarScrollFlags != null)
-                intent.putExtra("toolbarScrollFlags", toolbarScrollFlags.intValue());
-
-            if (iconDefaultColor != null)
-                intent.putExtra("iconDefaultColor", iconDefaultColor.intValue());
-            if (iconDisabledColor != null)
-                intent.putExtra("iconDisabledColor", iconDisabledColor.intValue());
-            if (iconPressedColor != null)
-                intent.putExtra("iconPressedColor", iconPressedColor.intValue());
-            if (iconSelector != null)
-                intent.putExtra("iconSelector", iconSelector.intValue());
-
-            if (showDivider != null)
-                intent.putExtra("showDivider", showDivider.booleanValue());
-            if (gradientDivider != null)
-                intent.putExtra("gradientDivider", gradientDivider.booleanValue());
-            if (dividerColor != null)
-                intent.putExtra("dividerColor", dividerColor.intValue());
-            if (dividerHeight != null)
-                intent.putExtra("dividerHeight", dividerHeight.floatValue());
-
-            if (showProgressBar != null)
-                intent.putExtra("showProgressBar", showProgressBar.booleanValue());
-            if (progressBarColor != null)
-                intent.putExtra("progressBarColor", progressBarColor.intValue());
-            if (progressBarHeight != null)
-                intent.putExtra("progressBarHeight", progressBarHeight.floatValue());
-            if (progressBarPosition != null)
-                intent.putExtra("progressBarPosition", progressBarPosition);
-
-            if (titleDefault != null)
-                intent.putExtra("titleDefault", titleDefault);
-            if (updateTitleFromHtml != null)
-                intent.putExtra("updateTitleFromHtml", updateTitleFromHtml.booleanValue());
-            if (titleSize != null)
-                intent.putExtra("titleSize", titleSize.floatValue());
-            if (titleFont != null)
-                intent.putExtra("titleFont", titleFont);
-            if (titleColor != null)
-                intent.putExtra("titleColor", titleColor.intValue());
-
-            if (showUrl != null)
-                intent.putExtra("showUrl", showUrl.booleanValue());
-            if (urlSize != null)
-                intent.putExtra("urlSize", urlSize.floatValue());
-            if (urlFont != null)
-                intent.putExtra("urlFont", urlFont);
-            if (urlColor != null)
-                intent.putExtra("urlColor", urlColor.intValue());
-
-            if (menuColor != null)
-                intent.putExtra("menuColor", menuColor.intValue());
-            if (menuDropShadowColor != null)
-                intent.putExtra("menuDropShadowColor", menuDropShadowColor.intValue());
-            if (menuDropShadowSize != null)
-                intent.putExtra("menuDropShadowSize", menuDropShadowSize.floatValue());
-            if (menuSelector != null)
-                intent.putExtra("menuSelector", menuSelector.intValue());
-
-            if (menuTextSize != null)
-                intent.putExtra("menuTextSize", menuTextSize.floatValue());
-            if (menuTextFont != null)
-                intent.putExtra("menuTextFont", menuTextFont);
-            if (menuTextColor != null)
-                intent.putExtra("menuTextColor", menuTextColor.intValue());
-
-            if (showMenuRefresh != null)
-                intent.putExtra("showMenuRefresh", showMenuRefresh.booleanValue());
-            if (stringResRefresh != null)
-                intent.putExtra("stringResRefresh", stringResRefresh.intValue());
-            if (showMenuShareVia != null)
-                intent.putExtra("showMenuShareVia", showMenuShareVia.booleanValue());
-            if (stringResShareVia != null)
-                intent.putExtra("stringResShareVia", stringResShareVia.intValue());
-            if (showMenuCopyLink != null)
-                intent.putExtra("showMenuCopyLink", showMenuCopyLink.booleanValue());
-            if (stringResCopyLink != null)
-                intent.putExtra("stringResCopyLink", stringResCopyLink.intValue());
-            if (showMenuOpenWith != null)
-                intent.putExtra("showMenuOpenWith", showMenuOpenWith.booleanValue());
-            if (stringResOpenWith != null)
-                intent.putExtra("stringResOpenWith", stringResOpenWith.intValue());
-
-            if (animationCloseEnter != null)
-                intent.putExtra("animationCloseEnter", animationCloseEnter.intValue());
-            if (animationCloseExit != null)
-                intent.putExtra("animationCloseExit", animationCloseExit.intValue());
-
-            if (backPressToClose != null)
-                intent.putExtra("backPressToClose", backPressToClose.booleanValue());
-            if (stringResCopiedToClipboard != null)
-                intent.putExtra("stringResCopiedToClipboard", stringResCopiedToClipboard.intValue());
-
-            intent.putExtra("url", url);
+            intent.putExtra("builder", this);
 
             activity.startActivity(intent);
             activity.overridePendingTransition(animationOpenEnter == null ? R.anim.modal_activity_open_enter : animationOpenEnter,

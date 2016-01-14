@@ -7,16 +7,14 @@
 #### Beautiful and customizable Android Activity that shows web pages within an app.
 
 * Builder pattern
-* Various options
-* Material design
-* Pre-made icons
-* Custom themes
-* Transition animations
+* Material design & Pre-made icons
+* Custom themes & Custom transition animations
+* Support collapsing toolbar & contextual actionbar
+* SwipeRefreshLayout & Progressbar
 * Device rotation
-* Collapsing toolbar
 * Gradient divider
-* Custom typeface
-* Contextual actionbar
+* Custom typeface & translation
+* Supports Right to Left
 
 ## Screenshots
 <img src="https://github.com/TheFinestArtist/FinestWebView-Android/blob/master/art/screenshots.png?raw=true" width="888">
@@ -33,6 +31,18 @@
        src="https://github.com/TheFinestArtist/FinestWebView-Android/blob/master/art/youtube.png">
 </a>
 
+
+## Sample Project
+
+You can download the latest sample APK from this repo here: [sample-release.apk](https://github.com/TheFinestArtist/FinestWebView-Android/blob/master/sample/sample-release.apk?raw=true)
+
+It's also on Google Play:
+
+<a href="https://play.google.com/store/apps/details?id=com.thefinestartist.finestwebview.sample" target="_blank">
+  <img alt="Get it on Google Play"
+       src="https://developer.android.com/images/brand/en_generic_rgb_wo_60.png" />
+</a>
+
 ## Getting started
 
 #### Gradle Dependency (jcenter)
@@ -41,7 +51,7 @@ Easily reference the library in your Android projects using this dependency in y
 
 ```java
 dependencies {
-    compile 'com.thefinestartist:finestwebview:1.0.2'
+    compile 'com.thefinestartist:finestwebview:1.1.2'
 }
 ```
 
@@ -51,9 +61,13 @@ FinestWebView is basically and Android activity with webview, toolbar and etc.
 You have to add FinestWebViewActivity in your `AndroidManifest.xml`
 
 ```xml
+<uses-permission android:name="android.permission.INTERNET" />
+
 <activity
     android:name="com.thefinestartist.finestwebview.FinestWebViewActivity"
-    android:theme="@style/FinestWebViewTheme" />
+    android:configChanges="keyboardHidden|orientation|screenSize"
+    android:screenOrientation="sensor"
+    android:theme="@style/FinestWebViewTheme.Light" />
 ```
 
 #### Basic WebView
@@ -90,6 +104,16 @@ You can use your own Theme for FinestWebView. If you want to use pre-defined the
 
 ### 2. Builder Options
 
+**Right to Left Options**
+```java
+rtl(boolean rtl);
+```
+
+**Theme Options**
+```java
+theme(@StyleRes int theme);
+```
+
 **StatusBar Options**
 ```java
 statusBarColor(@ColorInt int color);
@@ -112,6 +136,27 @@ iconDisabledColorRes(@ColorRes int colorRes);
 iconPressedColor(@ColorInt int color);
 iconPressedColorRes(@ColorRes int colorRes);
 iconSelector(@DrawableRes int selectorRes);
+```
+
+**Icon Options**
+```java
+showIconClose(boolean showIconClose);
+disableIconClose(boolean disableIconClose);
+showIconBack(boolean showIconBack);
+disableIconBack(boolean disableIconBack);
+showIconForward(boolean showIconForward);
+disableIconForward(boolean disableIconForward);
+showIconMenu(boolean showIconMenu);
+disableIconMenu(boolean disableIconMenu);
+```
+
+**SwipeRefreshLayout Options**
+```java
+showSwipeRefreshLayout(boolean showSwipeRefreshLayout);
+swipeRefreshColor(@ColorInt int color);
+swipeRefreshColorRes(@ColorRes int colorRes);
+swipeRefreshColors(int[] colors);
+swipeRefreshColorsRes(@ArrayRes int colorsRes);
 ```
 
 **Divider Options**
@@ -178,6 +223,14 @@ menuTextFont(String menuTextFont);
 menuTextColor(@ColorInt int color);
 menuTextColorRes(@ColorRes int colorRes);
 
+menuTextGravity(int gravity);
+menuTextPaddingLeft(float menuTextPaddingLeft);
+menuTextPaddingLeft(int menuTextPaddingLeft);
+menuTextPaddingLeftRes(@DimenRes int menuTextPaddingLeft);
+menuTextPaddingRight(float menuTextPaddingRight);
+menuTextPaddingRight(int menuTextPaddingRight);
+menuTextPaddingRightRes(@DimenRes int menuTextPaddingRight);
+
 showMenuRefresh(boolean showMenuRefresh);
 stringResRefresh(@StringRes int stringResRefresh);
 showMenuShareVia(boolean showMenuShareVia);
@@ -196,6 +249,53 @@ setCustomAnimations(@AnimRes int animationOpenEnter,
                     @AnimRes int animationCloseExit)
 backPressToClose(boolean backPressToClose);
 stringResCopiedToClipboard(@StringRes int stringResCopiedToClipboard);
+```
+
+**WebView Options**
+```java
+webViewSupportZoom(boolean webViewSupportZoom);
+webViewMediaPlaybackRequiresUserGesture (boolean webViewMediaPlaybackRequiresUserGesture);
+webViewBuiltInZoomControls (boolean webViewBuiltInZoomControls);
+webViewDisplayZoomControls (boolean webViewDisplayZoomControls);
+webViewAllowFileAccess (boolean webViewAllowFileAccess);
+webViewAllowContentAccess (boolean webViewAllowContentAccess);
+webViewLoadWithOverviewMode (boolean webViewLoadWithOverviewMode);
+webViewSaveFormData (boolean webViewSaveFormData);
+webViewTextZoom (int webViewTextZoom);
+webViewUseWideViewPort (boolean webViewUseWideViewPort);
+webViewSupportMultipleWindows (boolean webViewSupportMultipleWindows);
+webViewLayoutAlgorithm (WebSettings.LayoutAlgorithm webViewLayoutAlgorithm);
+webViewStandardFontFamily (String webViewStandardFontFamily);
+webViewFixedFontFamily (String webViewFixedFontFamily);
+webViewSansSerifFontFamily (String webViewSansSerifFontFamily);
+webViewSerifFontFamily (String webViewSerifFontFamily);
+webViewCursiveFontFamily (String webViewCursiveFontFamily);
+webViewFantasyFontFamily (String webViewFantasyFontFamily);
+webViewMinimumFontSize (int webViewMinimumFontSize);
+webViewMinimumLogicalFontSize (int webViewMinimumLogicalFontSize);
+webViewDefaultFontSize (int webViewDefaultFontSize);
+webViewDefaultFixedFontSize (int webViewDefaultFixedFontSize);
+webViewLoadsImagesAutomatically (boolean webViewLoadsImagesAutomatically);
+webViewBlockNetworkImage (boolean webViewBlockNetworkImage);
+webViewBlockNetworkLoads (boolean webViewBlockNetworkLoads);
+webViewJavaScriptEnabled (boolean webViewJavaScriptEnabled);
+webViewAllowUniversalAccessFromFileURLs (boolean webViewAllowUniversalAccessFromFileURLs);
+webViewAllowFileAccessFromFileURLs (boolean webViewAllowFileAccessFromFileURLs);
+webViewGeolocationDatabasePath (String webViewGeolocationDatabasePath);
+webViewAppCacheEnabled (boolean webViewAppCacheEnabled);
+webViewAppCachePath (String webViewAppCachePath);
+webViewDatabaseEnabled (boolean webViewDatabaseEnabled);
+webViewDomStorageEnabled (boolean webViewDomStorageEnabled);
+webViewGeolocationEnabled (boolean webViewGeolocationEnabled);
+webViewJavaScriptCanOpenWindowsAutomatically (boolean webViewJavaScriptCanOpenWindowsAutomatically);
+webViewDefaultTextEncodingName (String webViewDefaultTextEncodingName);
+webViewUserAgentString (String webViewUserAgentString);
+webViewNeedInitialFocus (boolean webViewNeedInitialFocus);
+webViewCacheMode (int webViewCacheMode);
+webViewMixedContentMode (int webViewMixedContentMode);
+webViewOffscreenPreRaster (boolean webViewOffscreenPreRaster);
+
+injectJavaScript(String injectJavaScript);
 ```
 
 **Builder Pattern**
@@ -234,6 +334,10 @@ new FinestWebView.Builder(activity)
     .toolbarScrollFlags(0) // By sending as 0, toolbar collapsing will be disabled
     .show(url);
 ```
+
+
+#### Collapsing Toolbar vs WebView BuiltInZoomControls
+If you enable BuiltInZoomControls `webViewBuiltInZoomControls(true)`, it will automatically disable toolbar collapsing.
 
 
 #### Full Screen Mode
@@ -282,7 +386,6 @@ Use configChange, screenOrientation to customize your orientation options
     android:theme="@style/FinestWebViewTheme" />
 ```
 
-
 #### Gradient Divider
 
 You can make your divider gradient. If you do, webview will be under the gradient. If you disable gradient divider, webview will be below the divider.
@@ -296,7 +399,7 @@ new FinestWebView.Builder(activity)
 
 #### Custom Typeface
 
-You can use your own typeface for title, url, and menus. You have to add your font file in assets/fonts folder.
+You can use your own typeface for title, url, and menus. You have to add your font file in `assets/fonts` folder.
 
 ```java
 new FinestWebView.Builder(activity)
@@ -306,6 +409,40 @@ new FinestWebView.Builder(activity)
     .show(url);
 ```
 
+
+#### Custom Translation
+
+You can use your own String resources to translate strings.
+
+```java
+new FinestWebView.Builder(activity)
+    .stringResCopiedToClipboard(R.string.copied_to_clipboard)
+    .stringResRefresh(R.string.refresh)
+    .stringResShareVia(R.string.share_via)
+    .stringResCopyLink(R.string.copy_link)
+    .stringResOpenWith(R.string.open_with)
+    .show(url);
+```
+
+#### Right to Left
+
+You can support right to left by setting `android:supportsRtl="true"` in `AndroidManifest.xml` or `rtl(true)`.
+
+```xml
+<application
+    ...
+    android:supportsRtl="true">
+</application>
+```
+```java
+new FinestWebView.Builder(activity)
+    .rtl(true)
+    .show(url);
+```
+
+#### WebView Desktop Mode
+
+You can force WebView to show in desktop mode by setting `webViewUserAgentString("Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.4) Gecko/20100101 Firefox/4.0")`. 
 
 ## Designer
 

@@ -8,18 +8,22 @@
     android:background="@color/finestWhite"
     tools:context=".MainActivity">
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <WebView
-            android:id="@+id/webView"
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+            <FrameLayout
+                android:id="@+id/webLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-    </android.support.v4.widget.NestedScrollView>
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
@@ -32,7 +36,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:padding="0dp"
+            app:contentInsetEnd="0dp"
             app:contentInsetLeft="0dp"
+            app:contentInsetRight="0dp"
             app:contentInsetStart="0dp"
             app:layout_scrollFlags="scroll|enterAlways">
 
